@@ -1,0 +1,111 @@
+<script type="text/javascript">
+    var db;   // 建立全域變數
+    $(function(){
+		dbCreate();	// 建立資料庫
+		dbShow();		// 顯示全部資料
+		$("#btnInsert").bind("click",dbInsert); // 新增資料
+		$("#btnDelete").bind("click",dbDelete); // 刪除資料
+		$("#btnShow").bind("click",dbShow);     // 顯示全部資料
+		$("#btnDrop").bind("click",dbDrop);     // 刪除資料表
+    });  
+
+    function showResult(msg) { // 顯示操作訊息
+		$("#Result").html(msg+"<br/>");
+    }
+
+    function dbCreate() {  // 建立資料庫
+		db = openDatabase("myDb", "1.0", "my First Db", 2*1020 * 1024);
+           if ( db != null ) {
+              db.transaction(function(t) {
+                 t.executeSql("create table if not exists table01 (id INTEGER PRIMARY KEY , username VARCHAR(24))", null,
+                 function() { showResult("資料庫建立成功!"); },
+                 function(tx, err) { showResult("建立資料庫失敗!"); 
+			  });
+           });
+        } 
+    }
+	
+    function dbInsert() {  // 新增資料
+        if (!db){
+            alert('資料庫尚未建立！');
+            return;
+        }
+		db.transaction(function(t) {
+			var data=$("#txtData").val();
+			t.executeSql("INSERT INTO table01 (username) VALUES (?)",
+			[data],
+			function() { showResult("資料新增成功!"); },
+			function() { showResult("資料新增失敗!"); });
+		});
+    }
+	
+    function dbDelete() {  // 刪除資料
+        if (!db){
+            alert('資料庫尚未建立！');
+            return;
+        }
+		var curId=$("#txtDelete").val();
+		db.transaction(function(tran) {
+			tran.executeSql("DELETE FROM table01 WHERE id = ?",
+			[curId],
+			function() { showResult("資料已刪除!"); },
+			function() { showResult("資料刪除失敗!"); });
+		});
+    }
+
+    function dbShow(){  // 顯示全部資料
+        if (!db){
+            alert('資料庫尚未建立！');
+            return;
+        }
+        db.transaction(function(t) {
+            t.executeSql("SELECT * FROM table01", [], function(t, r) {				
+				var data="資料筆目="+ r.rows.length + "<br>" ;
+                for (var i = 0, c = r.rows.length; i < c; i++) {
+					data += "id=" + r.rows.item(i).id + " username=" + r.rows.item(i).username + "<br>";
+                }
+                showResult(data);
+            });
+        });    
+    }
+	
+	function dbDrop() {  // 刪除資料表
+		db = openDatabase("myDb", "1.0", "my First Db", 2*1020 * 1024);
+        db.transaction(function(t) {
+	        t.executeSql("DROP TABLE table01");
+			showResult("資料表 table01 已刪除");
+        });
+    }
+
+</script>
+</head>
+
+<body>
+<div data-role="page" id="page">
+  <div data-role="header">
+       <h1> Web SQL Database</h1>
+    </div>
+  <div data-role="content">
+     <input type="button" id="btnShow" value="顯示所有資料" />
+     <hr>
+     <fieldset>
+        <legend>請輸入姓名</legend>
+        <input type="text" id="txtData" value="訪客" />    
+        <input type="button" value="新增" id="btnInsert" />
+        <hr>
+     </fieldset>
+     <fieldset>
+        <legend>刪除指定 id 編號的資料</legend>
+        <input type="text" id="txtDelete" value="" />
+        <input type="button" value="刪除資料" id="btnDelete" />
+         <hr>
+     </fieldset>
+     <fieldset>
+        <legend>刪除 Table01 資料表</legend>
+        <input type="button" value="刪除資料表" id="btnDrop" />
+        <hr>
+     </fieldset>
+      <div id="Result">這裡顯示執行結果</div>
+  </div>
+</div>
+</body>
