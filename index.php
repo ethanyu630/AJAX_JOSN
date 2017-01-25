@@ -36,20 +36,6 @@ echo "<a href='http://localhost/homeworkajax/applenews1.php'>最新資訊整理<
 				$es=$totle;
 			}
 		}
-		for($a=1;$a<=$c;$a++){
-			if($page==$a){
-				echo "<a href='#'><font color='red' >$a|</font></a>";
-			}else{
-				echo "<a href='index.php?page=$a'>$a</a> | ";
-			}
-			
-		}
-
-
-		
-
-		
-
 		
 	?>
 	
@@ -67,7 +53,7 @@ echo "<a href='http://localhost/homeworkajax/applenews1.php'>最新資訊整理<
 
 							
 							var str="";
-							str+="<table>"
+							str+="<table border=1>"
 							for( var i in res){
 								
 								str+="<tr>";
@@ -94,7 +80,7 @@ echo "<a href='http://localhost/homeworkajax/applenews1.php'>最新資訊整理<
 						console.log(de);
 						$.post("test.php",{de:de},function(resd){
 							console.log(resd);
-							$("#result<?php echo $a?>").html(resd);
+							$("#dell<?php echo $a?>").html(resd);
 							console.log(typeof resd,resd)
 						},"json");				
 					});
@@ -113,18 +99,34 @@ echo "<a href='http://localhost/homeworkajax/applenews1.php'>最新資訊整理<
 		  <?php
 			  if($se!=$es){
 				  for($a=$se;$a<$es;$a++){
-					 echo
-					  "<div id='result$a'></div>
-						<div id='dell$a'></div>
+					 echo"
 						  <tr>
 							<td>".$time[$a]."</td>
 							<td><button id='found$a' value=".$id[$a].">".$title[$a]."</button></td>
 							<td><button id='del$a'  value=".$id[$a].">刪除</button></td>
-							
-						  </tr>";
+						  </tr>
+						  <tr>
+						  <td colspan='3'>
+						  <div id='result$a'></div></td>
+						  <div id='dell$a'></div>";
 				  }
+				  
 			  }
-		  ?>
+			
+		 
+		echo
+			"<tr>
+			  <td colspan='3' align='center'>";		
+			  for($a=1;$a<=$c;$a++){
+				if($page==$a){
+					echo "<a href='#'><font color='red' >$a|</font></a>";
+				}else{
+					echo "<a href='index.php?page=$a'>$a</a> | ";
+				}
+			  }
+		 ?>
+			  </td>
+			 </tr>
 		</table>
 
 	</body>

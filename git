@@ -1,0 +1,202 @@
+[1mdiff --git a/index.php b/index.php[m
+[1mindex c5e30fd..60e4413 100644[m
+[1m--- a/index.php[m
+[1m+++ b/index.php[m
+[36m@@ -36,20 +36,6 @@[m [mecho "<a href='http://localhost/homeworkajax/applenews1.php'>ÊúÄÊñ∞Ë≥áË®äÊï¥ÁêÜ<[m
+ 				$es=$totle;[m
+ 			}[m
+ 		}[m
+[31m-		for($a=1;$a<=$c;$a++){[m
+[31m-			if($page==$a){[m
+[31m-				echo "<a href='#'><font color='red' >$a|</font></a>";[m
+[31m-			}else{[m
+[31m-				echo "<a href='index.php?page=$a'>$a</a> | ";[m
+[31m-			}[m
+[31m-			[m
+[31m-		}[m
+[31m-[m
+[31m-[m
+[31m-		[m
+[31m-[m
+[31m-		[m
+[31m-[m
+ 		[m
+ 	?>[m
+ 	[m
+[36m@@ -67,7 +53,7 @@[m [mecho "<a href='http://localhost/homeworkajax/applenews1.php'>ÊúÄÊñ∞Ë≥áË®äÊï¥ÁêÜ<[m
+ [m
+ 							[m
+ 							var str="";[m
+[31m-							str+="<table>"[m
+[32m+[m							[32mstr+="<table border=1>"[m
+ 							for( var i in res){[m
+ 								[m
+ 								str+="<tr>";[m
+[36m@@ -94,7 +80,7 @@[m [mecho "<a href='http://localhost/homeworkajax/applenews1.php'>ÊúÄÊñ∞Ë≥áË®äÊï¥ÁêÜ<[m
+ 						console.log(de);[m
+ 						$.post("test.php",{de:de},function(resd){[m
+ 							console.log(resd);[m
+[31m-							$("#result<?php echo $a?>").html(resd);[m
+[32m+[m							[32m$("#dell<?php echo $a?>").html(resd);[m
+ 							console.log(typeof resd,resd)[m
+ 						},"json");				[m
+ 					});[m
+[36m@@ -113,18 +99,34 @@[m [mecho "<a href='http://localhost/homeworkajax/applenews1.php'>ÊúÄÊñ∞Ë≥áË®äÊï¥ÁêÜ<[m
+ 		  <?php[m
+ 			  if($se!=$es){[m
+ 				  for($a=$se;$a<$es;$a++){[m
+[31m-					 echo[m
+[31m-					  "<div id='result$a'></div>[m
+[31m-						<div id='dell$a'></div>[m
+[32m+[m					[32m echo"[m
+ 						  <tr>[m
+ 							<td>".$time[$a]."</td>[m
+ 							<td><button id='found$a' value=".$id[$a].">".$title[$a]."</button></td>[m
+ 							<td><button id='del$a'  value=".$id[$a].">Âà™Èô§</button></td>[m
+[31m-							[m
+[31m-						  </tr>";[m
+[32m+[m						[32m  </tr>[m
+[32m+[m						[32m  <tr>[m
+[32m+[m						[32m  <td colspan='3'>[m
+[32m+[m						[32m  <div id='result$a'></div></td>[m
+[32m+[m						[32m  <div id='dell$a'></div>";[m
+ 				  }[m
+[32m+[m[41m				  [m
+ 			  }[m
+[31m-		  ?>[m
+[32m+[m[41m			[m
+[32m+[m[41m		 [m
+[32m+[m		[32mecho[m
+[32m+[m			[32m"<tr>[m
+[32m+[m			[32m  <td colspan='3' align='center'>";[m[41m		[m
+[32m+[m			[32m  for($a=1;$a<=$c;$a++){[m
+[32m+[m				[32mif($page==$a){[m
+[32m+[m					[32mecho "<a href='#'><font color='red' >$a|</font></a>";[m
+[32m+[m				[32m}else{[m
+[32m+[m					[32mecho "<a href='index.php?page=$a'>$a</a> | ";[m
+[32m+[m				[32m}[m
+[32m+[m			[32m  }[m
+[32m+[m		[32m ?>[m
+[32m+[m			[32m  </td>[m
+[32m+[m			[32m </tr>[m
+ 		</table>[m
+ [m
+ 	</body>[m
+[1mdiff --git a/webSqlDatabase.html b/webSqlDatabase.html[m
+[1mdeleted file mode 100644[m
+[1mindex bd8902a..0000000[m
+[1m--- a/webSqlDatabase.html[m
+[1m+++ /dev/null[m
+[36m@@ -1,111 +0,0 @@[m
+[31m-<script type="text/javascript">[m
+[31m-    var db;   // ´ÿ•ﬂ•˛∞Ï≈‹º∆[m
+[31m-    $(function(){[m
+[31m-		dbCreate();	// ´ÿ•ﬂ∏ÍÆ∆Æw[m
+[31m-		dbShow();		// ≈„•‹•˛≥°∏ÍÆ∆[m
+[31m-		$("#btnInsert").bind("click",dbInsert); // ∑sºW∏ÍÆ∆[m
+[31m-		$("#btnDelete").bind("click",dbDelete); // ßR∞£∏ÍÆ∆[m
+[31m-		$("#btnShow").bind("click",dbShow);     // ≈„•‹•˛≥°∏ÍÆ∆[m
+[31m-		$("#btnDrop").bind("click",dbDrop);     // ßR∞£∏ÍÆ∆™Ì[m
+[31m-    });  [m
+[31m-[m
+[31m-    function showResult(msg) { // ≈„•‹æﬁß@∞TÆß[m
+[31m-		$("#Result").html(msg+"<br/>");[m
+[31m-    }[m
+[31m-[m
+[31m-    function dbCreate() {  // ´ÿ•ﬂ∏ÍÆ∆Æw[m
+[31m-		db = openDatabase("myDb", "1.0", "my First Db", 2*1020 * 1024);[m
+[31m-           if ( db != null ) {[m
+[31m-              db.transaction(function(t) {[m
+[31m-                 t.executeSql("create table if not exists table01 (id INTEGER PRIMARY KEY , username VARCHAR(24))", null,[m
+[31m-                 function() { showResult("∏ÍÆ∆Æw´ÿ•ﬂ¶®•\!"); },[m
+[31m-                 function(tx, err) { showResult("´ÿ•ﬂ∏ÍÆ∆Æw•¢±—!"); [m
+[31m-			  });[m
+[31m-           });[m
+[31m-        } [m
+[31m-    }[m
+[31m-	[m
+[31m-    function dbInsert() {  // ∑sºW∏ÍÆ∆[m
+[31m-        if (!db){[m
+[31m-            alert('∏ÍÆ∆Æw©|•º´ÿ•ﬂ°I');[m
+[31m-            return;[m
+[31m-        }[m
+[31m-		db.transaction(function(t) {[m
+[31m-			var data=$("#txtData").val();[m
+[31m-			t.executeSql("INSERT INTO table01 (username) VALUES (?)",[m
+[31m-			[data],[m
+[31m-			function() { showResult("∏ÍÆ∆∑sºW¶®•\!"); },[m
+[31m-			function() { showResult("∏ÍÆ∆∑sºW•¢±—!"); });[m
+[31m-		});[m
+[31m-    }[m
+[31m-	[m
+[31m-    function dbDelete() {  // ßR∞£∏ÍÆ∆[m
+[31m-        if (!db){[m
+[31m-            alert('∏ÍÆ∆Æw©|•º´ÿ•ﬂ°I');[m
+[31m-            return;[m
+[31m-        }[m
+[31m-		var curId=$("#txtDelete").val();[m
+[31m-		db.transaction(function(tran) {[m
+[31m-			tran.executeSql("DELETE FROM table01 WHERE id = ?",[m
+[31m-			[curId],[m
+[31m-			function() { showResult("∏ÍÆ∆§wßR∞£!"); },[m
+[31m-			function() { showResult("∏ÍÆ∆ßR∞£•¢±—!"); });[m
+[31m-		});[m
+[31m-    }[m
+[31m-[m
+[31m-    function dbShow(){  // ≈„•‹•˛≥°∏ÍÆ∆[m
+[31m-        if (!db){[m
+[31m-            alert('∏ÍÆ∆Æw©|•º´ÿ•ﬂ°I');[m
+[31m-            return;[m
+[31m-        }[m
+[31m-        db.transaction(function(t) {[m
+[31m-            t.executeSql("SELECT * FROM table01", [], function(t, r) {				[m
+[31m-				var data="∏ÍÆ∆µß•ÿ="+ r.rows.length + "<br>" ;[m
+[31m-                for (var i = 0, c = r.rows.length; i < c; i++) {[m
+[31m-					data += "id=" + r.rows.item(i).id + " username=" + r.rows.item(i).username + "<br>";[m
+[31m-                }[m
+[31m-                showResult(data);[m
+[31m-            });[m
+[31m-        });    [m
+[31m-    }[m
+[31m-	[m
+[31m-	function dbDrop() {  // ßR∞£∏ÍÆ∆™Ì[m
+[31m-		db = openDatabase("myDb", "1.0", "my First Db", 2*1020 * 1024);[m
+[31m-        db.transaction(function(t) {[m
+[31m-	        t.executeSql("DROP TABLE table01");[m
+[31m-			showResult("∏ÍÆ∆™Ì table01 §wßR∞£");[m
+[31m-        });[m
+[31m-    }[m
+[31m-[m
+[31m-</script>[m
+[31m-</head>[m
+[31m-[m
+[31m-<body>[m
+[31m-<div data-role="page" id="page">[m
+[31m-  <div data-role="header">[m
+[31m-       <h1> Web SQL Database</h1>[m
+[31m-    </div>[m
+[31m-  <div data-role="content">[m
+[31m-     <input type="button" id="btnShow" value="≈„•‹©“¶≥∏ÍÆ∆" />[m
+[31m-     <hr>[m
+[31m-     <fieldset>[m
+[31m-        <legend>Ω–øÈ§J©m¶W</legend>[m
+[31m-        <input type="text" id="txtData" value="≥X´»" />    [m
+[31m-        <input type="button" value="∑sºW" id="btnInsert" />[m
+[31m-        <hr>[m
+[31m-     </fieldset>[m
+[31m-     <fieldset>[m
+[31m-        <legend>ßR∞£´¸©w id Ωs∏π™∫∏ÍÆ∆</legend>[m
+[31m-        <input type="text" id="txtDelete" value="" />[m
+[31m-        <input type="button" value="ßR∞£∏ÍÆ∆" id="btnDelete" />[m
+[31m-         <hr>[m
+[31m-     </fieldset>[m
+[31m-     <fieldset>[m
+[31m-        <legend>ßR∞£ Table01 ∏ÍÆ∆™Ì</legend>[m
+[31m-        <input type="button" value="ßR∞£∏ÍÆ∆™Ì" id="btnDrop" />[m
+[31m-        <hr>[m
+[31m-     </fieldset>[m
+[31m-      <div id="Result">≥o∏Ã≈„•‹∞ı¶Êµ≤™G</div>[m
+[31m-  </div>[m
+[31m-</div>[m
+[31m-</body>[m
+\ No newline at end of file[m
